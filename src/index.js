@@ -115,7 +115,11 @@ function App() {
       <UserMenu />
       <div id="bkg-img"></div>
       <div id="app">
-        <img src="https://pngimg.com/uploads/pubg/pubg_PNG29.png" alt="title" />
+        <img
+          src="https://pngimg.com/uploads/pubg/pubg_PNG29.png"
+          alt="title"
+          width="100%"
+        />
         {/* <h1 className="subtitle">Stat Ground</h1> */}
         <SuspenseWithPerf
           traceId={"firebase-user-wait"}
