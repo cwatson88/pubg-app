@@ -115,13 +115,8 @@ code {
 #user-menu {
   position: absolute;
   z-index: 200;
-  right: 0;
+  left: 0;
   margin: 4px;
-}
-
-/* for the title menu */
-div#pr_id_2 {
-  left: auto !important;
 }
 
 img.firebaseui-idp-icon {
