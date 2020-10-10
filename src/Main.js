@@ -30,7 +30,7 @@ export default function Main({ user }) {
       .catch(function (error) {
         console.log("Error getting document:", error);
       });
-  }, []);
+  });
 
   function addUser() {
     collection

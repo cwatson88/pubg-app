@@ -10,6 +10,7 @@ module.exports = {
     "plugin:react/recommended",
     "prettier",
     "prettier/react",
+    "plugin:react-hooks/recommended",
   ],
   globals: {
     Atomics: "readonly",

@@ -14,26 +14,27 @@ export default function FindFriends({ uid, currentFriends = [] }) {
   const fireStore = useFirestore();
   const userCollection = useFirestore().collection("users");
 
-  const searchFriend = async () => {
-    const res = await fireStore.collection("users").get();
-    const searchResults = res.docs.reduce((prev, curr) => {
-      const { gamerTag } = curr.data();
-      const matched = gamerTag.toLowerCase().includes(friend.toLowerCase());
-      if (matched) {
-        prev.push(gamerTag);
-      }
-      return prev;
-    }, []);
-
-    setPlayerList(searchResults);
-  };
   useEffect(() => {
+    const searchFriend = async () => {
+      const res = await fireStore.collection("users").get();
+      const searchResults = res.docs.reduce((prev, curr) => {
+        const { gamerTag } = curr.data();
+        const matched = gamerTag.toLowerCase().includes(friend.toLowerCase());
+        if (matched) {
+          prev.push(gamerTag);
+        }
+        return prev;
+      }, []);
+
+      setPlayerList(searchResults);
+    };
+
     if (friend.length > 2) {
       searchFriend();
     } else {
       setPlayerList([]);
     }
-  }, [friend]);
+  }, [friend, fireStore]);
 
   // TODO:!currently can add the same person twice
   const addFriend = (friend) => {
@@ -80,7 +81,12 @@ export default function FindFriends({ uid, currentFriends = [] }) {
         <div className="find-player" key={player}>
           <p>{player}</p>
           {currentFriends.includes(player) ? (
-            <i>Already a friend 👊</i>
+            <i>
+              Already a friend{" "}
+              <span role="img" aria-label="fist pump">
+                👊
+              </span>
+            </i>
           ) : (
             <Button
               onClick={() => addFriend(player)}
