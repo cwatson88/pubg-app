@@ -11,11 +11,8 @@ import { Button } from "primereact/button";
 
 import {
   FirebaseAppProvider,
-  useFirestoreDocData,
-  useFirestore,
   SuspenseWithPerf,
   useAuth,
-  AuthCheck,
   useUser,
 } from "reactfire";
 
@@ -45,6 +42,7 @@ function LogInButton() {
         <img
           className="firebaseui-idp-icon"
           src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+          alt="Google Login"
         />
       </span>
       <span>Sign in with Google</span>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useFirestoreDocData, useFirestore } from "reactfire";
+import { useFirestore } from "reactfire";
 import Stats from "./Stats";
 import FindFriends from "./FindFriends";
 import { InputText } from "primereact/inputtext";
