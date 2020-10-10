@@ -63,6 +63,7 @@ const signOut = () => {
       // Sign-out successful.
     })
     .catch(function (error) {
+      console.error(error);
       // An error happened.
     });
 };

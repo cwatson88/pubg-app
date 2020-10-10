@@ -8,8 +8,8 @@ import { InputText } from "primereact/inputtext";
 export default function Main({ user }) {
   const [userDatabaseDetails, setUserDatabaseDetails] = useState({});
 
-  // details from users Google profile
-  const { email, displayName, photoURL, uid } = user;
+  // details from users Google profile - email, displayName, photoURL, uid
+  const { email, displayName, uid } = user;
   // read the user details from Firestore based on the current user's ID
   const collection = useFirestore().collection("users");
 

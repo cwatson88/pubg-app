@@ -1,9 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  useFirestoreDocData,
-  useFirestoreCollectionData,
-  useFirestore,
-} from "reactfire";
+import { useFirestore } from "reactfire";
 
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
