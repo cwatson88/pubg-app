@@ -3,10 +3,11 @@ import { useFirestore } from "reactfire";
 import GunStats from "./GunStats";
 import FindFriends from "./FindFriends";
 import { InputText } from "primereact/inputtext";
+import LifetimeStats from "./LifetimeStats";
 
 // Component should only show if the user is logged in
 export default function Main({ user }) {
-  const [userDatabaseDetails, setUserDatabaseDetails] = useState({});
+  const [userDatabaseDetails, setUserDatabaseDetails] = useState(null);
 
   // details from users Google profile - email, displayName, photoURL, uid
   const { email, displayName, uid } = user;
@@ -14,22 +15,24 @@ export default function Main({ user }) {
   const collection = useFirestore().collection("users");
 
   useEffect(() => {
-    const userDoc = collection.doc(uid);
-    userDoc
-      .get()
-      .then(function (doc) {
-        if (doc.exists) {
-          console.log("Document data:", doc.data());
-          setUserDatabaseDetails(doc.data());
-        } else {
-          // doc.data() will be undefined in this case
-          console.log("No such document!", doc);
-          addUser();
-        }
-      })
-      .catch(function (error) {
-        console.log("Error getting document:", error);
-      });
+    if (!userDatabaseDetails) {
+      const userDoc = collection.doc(uid);
+      userDoc
+        .get()
+        .then(function (doc) {
+          if (doc.exists) {
+            console.log("Document data:", doc.data());
+            setUserDatabaseDetails(doc.data());
+          } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!", doc);
+            addUser();
+          }
+        })
+        .catch(function (error) {
+          console.log("Error getting document:", error);
+        });
+    }
   });
 
   function addUser() {
@@ -88,11 +91,14 @@ export default function Main({ user }) {
         <GamerTagInput updateGamerTag={updateGamerTag}></GamerTagInput>
       ) : (
         <div>
-          <GunStats gamerTag={userDatabaseDetails?.gamerTag}></GunStats>
           <FindFriends
             currentFriends={userDatabaseDetails.friends}
             uid={uid}
           ></FindFriends>
+          <GunStats gamerTag={userDatabaseDetails?.gamerTag}></GunStats>
+          <LifetimeStats
+            gamerTag={userDatabaseDetails?.gamerTag}
+          ></LifetimeStats>
         </div>
       )}
     </div>

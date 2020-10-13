@@ -5,7 +5,14 @@ import * as React from "react";
  */
 function SvgComponent(props) {
   return (
-    <svg width={277} height={49} viewBox="0 0 277 49" fill="none" {...props}>
+    <svg
+      width={277}
+      height={49}
+      viewBox="0 0 277 49"
+      fill="none"
+      {...props}
+      key={props.statName}
+    >
       <path
         fillRule="evenodd"
         clipRule="evenodd"

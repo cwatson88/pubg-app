@@ -23,9 +23,11 @@ export default function LifetimeStats({ gamerTag }) {
       <div>
         {statsResponse && (
           <div>
-            {Object.values(statsResponse).map((key, value) => (
-              <Stat statName={key} statValue={value}></Stat>
-            ))}
+            {Object.entries(statsResponse["total-stats"]).map(
+              ([key, value]) => (
+                <Stat statName={key} statValue={value}></Stat>
+              )
+            )}
           </div>
         )}
       </div>
