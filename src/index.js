@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { createRoot } from "react-dom";
-import "./index.css";
+import "./assets/css/index.css";
 import Main from "./components/Main";
 import firebase from "firebase";
 import "primereact/resources/themes/vela-orange/theme.css";

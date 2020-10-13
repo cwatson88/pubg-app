@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useFirestore } from "reactfire";
-import Stats from "./Stats";
+import GunStats from "./GunStats";
 import FindFriends from "./FindFriends";
 import { InputText } from "primereact/inputtext";
 
@@ -88,7 +88,7 @@ export default function Main({ user }) {
         <GamerTagInput updateGamerTag={updateGamerTag}></GamerTagInput>
       ) : (
         <div>
-          <Stats gamerTag={userDatabaseDetails?.gamerTag}></Stats>
+          <GunStats gamerTag={userDatabaseDetails?.gamerTag}></GunStats>
           <FindFriends
             currentFriends={userDatabaseDetails.friends}
             uid={uid}
