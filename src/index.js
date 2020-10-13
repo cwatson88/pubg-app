@@ -1,21 +1,19 @@
 import React, { useRef } from "react";
 import { createRoot } from "react-dom";
 import "./index.css";
-import Main from "./Main";
+import Main from "./components/Main";
 import firebase from "firebase";
 import "primereact/resources/themes/vela-orange/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import { Menu } from "primereact/menu";
 import { Button } from "primereact/button";
+import * as serviceWorker from "./serviceWorker";
 
 import {
   FirebaseAppProvider,
-  useFirestoreDocData,
-  useFirestore,
   SuspenseWithPerf,
   useAuth,
-  AuthCheck,
   useUser,
 } from "reactfire";
 
@@ -45,6 +43,7 @@ function LogInButton() {
         <img
           className="firebaseui-idp-icon"
           src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+          alt="Google Login"
         />
       </span>
       <span>Sign in with Google</span>
@@ -65,6 +64,7 @@ const signOut = () => {
       // Sign-out successful.
     })
     .catch(function (error) {
+      console.error(error);
       // An error happened.
     });
 };
@@ -135,3 +135,8 @@ function App() {
 // Enable Concurrent Mode
 // https://reactjs.org/docs/concurrent-mode-adoption.html#enabling-concurrent-mode
 createRoot(document.getElementById("root")).render(<App />);
+
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://bit.ly/CRA-PWA
+serviceWorker.unregister();
