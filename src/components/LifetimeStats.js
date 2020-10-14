@@ -5,7 +5,9 @@ import Stat from "./Stat";
 export default function LifetimeStats({ gamerTag }) {
   const [statsResponse, setStatsResponse] = useState(null);
   function getStats(gamerTag) {
-    fetch(`http://localhost:8080/lifetime/${gamerTag}`)
+    fetch(
+      `https://pubg-rust-server-5y4ai7j7gq-ez.a.run.app/lifetime/${gamerTag}`
+    )
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
