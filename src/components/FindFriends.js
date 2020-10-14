@@ -67,7 +67,9 @@ export default function FindFriends({ uid, currentFriends = [] }) {
   };
 
   return (
-    <div>
+    <div
+      style={{ display: "grid", justifyItems: "center", marginBottom: "10px" }}
+    >
       <br></br>
       <span className="p-input-icon-left">
         <i className="pi pi-search" />

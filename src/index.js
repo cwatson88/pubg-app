@@ -113,12 +113,12 @@ function App() {
   return (
     <FirebaseAppProvider firebaseConfig={firebaseConfig}>
       <UserMenu />
-      <div id="bkg-img"></div>
+      {/* <div id="bkg-img"></div> */}
       <div id="app">
         <img
           src="https://pngimg.com/uploads/pubg/pubg_PNG29.png"
           alt="title"
-          width="100%"
+          id="header-image"
         />
         {/* <h1 className="subtitle">Stat Ground</h1> */}
         <SuspenseWithPerf

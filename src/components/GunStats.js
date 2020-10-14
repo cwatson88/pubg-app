@@ -28,7 +28,7 @@ export default function GunStats({ gamerTag }) {
     );
   };
   return (
-    <div>
+    <div style={{ marginBottom: "15px" }}>
       <Button
         onClick={() => getStats(gamerTag)}
         label="Get top 5 guns"

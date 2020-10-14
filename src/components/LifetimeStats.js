@@ -14,7 +14,7 @@ export default function LifetimeStats({ gamerTag }) {
   }
 
   return (
-    <div>
+    <div style={{ display: "grid", justifyItems: "center" }}>
       <Button
         onClick={() => getStats(gamerTag)}
         label="Get LifeTime Stats"
@@ -22,10 +22,15 @@ export default function LifetimeStats({ gamerTag }) {
       />
       <div>
         {statsResponse && (
-          <div>
+          <div className="stat-items">
             {Object.entries(statsResponse["total-stats"]).map(
               ([key, value]) => (
-                <Stat statName={key} statValue={value}></Stat>
+                <Stat
+                  key={key}
+                  statName={value.friendly_name}
+                  statValue={value.value}
+                  category={value.category}
+                ></Stat>
               )
             )}
           </div>

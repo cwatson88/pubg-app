@@ -90,7 +90,7 @@ export default function Main({ user }) {
       {!userDatabaseDetails?.gamerTag ? (
         <GamerTagInput updateGamerTag={updateGamerTag}></GamerTagInput>
       ) : (
-        <div>
+        <div style={{ display: "grid", justifyItems: "center" }}>
           <FindFriends
             currentFriends={userDatabaseDetails.friends}
             uid={uid}
