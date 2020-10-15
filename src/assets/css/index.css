@@ -9,6 +9,24 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--surface-a);
   color: white;
+  background-image: url("../images/large-background.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  /* background-size: cover; */
+  background-attachment: fixed;
+  animation: move-background 360s ease infinite;
+}
+
+@keyframes move-background {
+  0% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 100% 0%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
 }
 
 code {
@@ -58,6 +76,7 @@ code {
   align-items: center;
   justify-content: center;
   width: 100%;
+  margin: 5px;
 }
 
 #bkg-img {
@@ -68,6 +87,7 @@ code {
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+  background-attachment: fixed;
 }
 
 #app {
@@ -75,11 +95,14 @@ code {
   position: absolute;
   display: grid;
   align-items: center;
-  align-content: center;
   justify-items: center;
   width: 100vw;
   height: 100vh;
-  background: #1f2d40ad;
+}
+
+#header-image {
+  width: 35%;
+  min-width: 320px;
 }
 
 .subtitle {
@@ -93,7 +116,7 @@ code {
 
 .grid--center {
   display: grid;
-  justify-content: center;
+  justify-items: center;
 }
 
 .find-player {
@@ -134,4 +157,11 @@ button.google-sign-in__btn {
 }
 .gun-list > li {
   padding: 5px;
+}
+
+.stat-items {
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 12px;
+  margin-top: 25px;
 }

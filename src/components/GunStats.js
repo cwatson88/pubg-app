@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button } from "primereact/button";
 
-export default function Stats({ gamerTag }) {
+export default function GunStats({ gamerTag }) {
   const [statsResponse, setStatsResponse] = useState(null);
   function getStats(gamerTag) {
     fetch(
@@ -28,7 +28,7 @@ export default function Stats({ gamerTag }) {
     );
   };
   return (
-    <div>
+    <div style={{ marginBottom: "15px" }}>
       <Button
         onClick={() => getStats(gamerTag)}
         label="Get top 5 guns"
