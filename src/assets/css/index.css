@@ -9,7 +9,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--surface-a);
   color: white;
-  background-image: url("../images/large-background.jpg");
+  background-image: url("../images/large-background.webp");
   background-position: center;
   background-repeat: no-repeat;
   /* background-size: cover; */
@@ -79,7 +79,7 @@ code {
   margin: 5px;
 }
 
-#bkg-img {
+/* #bkg-img {
   background-image: url("https://img.redbull.com/images/c_crop,x_360,y_0,h_1200,w_1333/c_fill,w_1180,h_1073/q_auto,f_auto/redbullcom/2018/06/29/a5ac34f5-7184-407d-acc0-5f934de3091f/pubg-deathmatch");
   filter: blur(3px) sepia(1);
   height: 100vh;
@@ -88,7 +88,7 @@ code {
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
-}
+} */
 
 #app {
   z-index: 100;
