@@ -48,6 +48,8 @@ function LogInButton() {
         <img
           className="firebaseui-idp-icon"
           src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+          width="30px"
+          height="21px"
           alt="Google Login"
         />
       </span>
