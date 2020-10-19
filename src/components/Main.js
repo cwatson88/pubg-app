@@ -31,7 +31,20 @@ export default function Main({ user }) {
           } else {
             // doc.data() will be undefined in this case
             console.log("No such document!", doc);
-            addUser();
+            collection
+              .doc(uid)
+              .set({
+                email,
+                displayName,
+                gamerTag: "",
+                friends: [],
+              })
+              .then(function () {
+                console.log("Document successfully written!");
+              })
+              .catch(function (error) {
+                console.error("Error writing document: ", error);
+              });
             setGamerTag(false);
             setLoading(false);
           }
@@ -40,24 +53,7 @@ export default function Main({ user }) {
           console.log("Error getting document:", error);
         });
     }
-  }, [addUser, collection, uid, userDatabaseDetails]);
-
-  function addUser() {
-    collection
-      .doc(uid)
-      .set({
-        email,
-        displayName,
-        gamerTag: "",
-        friends: [],
-      })
-      .then(function () {
-        console.log("Document successfully written!");
-      })
-      .catch(function (error) {
-        console.error("Error writing document: ", error);
-      });
-  }
+  }, [collection, displayName, email, uid, userDatabaseDetails]);
 
   function updateGamerTag(gamerTag) {
     // will need to wrap this in a try catch and show that the gamertag has been added
