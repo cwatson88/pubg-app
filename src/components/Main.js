@@ -99,6 +99,7 @@ export default function Main({ user }) {
           {userDatabaseDetails && (
             <>
               <h1>
+                {userDatabaseDetails?.gamerTag}
                 <span className="subtitle__small"> - {displayName}</span>
               </h1>
               <div style={{ display: "grid", justifyItems: "center" }}>
