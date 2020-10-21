@@ -9,6 +9,7 @@ import "primeicons/primeicons.css";
 import { Menu } from "primereact/menu";
 import { Button } from "primereact/button";
 import * as serviceWorker from "./serviceWorker";
+import logo from "./assets/images/logo.webp";
 
 import {
   FirebaseAppProvider,
@@ -38,11 +39,17 @@ function LogInButton() {
   };
 
   return (
-    <button onClick={logIn} className="google-sign-in__btn">
+    <button
+      onClick={logIn}
+      className="google-sign-in__btn"
+      aria-label="sign in button"
+    >
       <span>
         <img
           className="firebaseui-idp-icon"
           src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+          width="30px"
+          height="21px"
           alt="Google Login"
         />
       </span>
@@ -101,7 +108,7 @@ const UserMenu = () => {
     <div id="user-menu">
       <Menu model={items} popup ref={ref} style={{ right: 0 }} />
       <Button
-        label=""
+        aria-label="user menu"
         icon="pi pi-bars"
         onClick={(event) => ref.current.toggle(event)}
       />
@@ -113,13 +120,8 @@ function App() {
   return (
     <FirebaseAppProvider firebaseConfig={firebaseConfig}>
       <UserMenu />
-      {/* <div id="bkg-img"></div> */}
       <div id="app">
-        <img
-          src="https://pngimg.com/uploads/pubg/pubg_PNG29.png"
-          alt="title"
-          id="header-image"
-        />
+        <img src={logo} alt="title" id="header-image" />
         {/* <h1 className="subtitle">Stat Ground</h1> */}
         <SuspenseWithPerf
           traceId={"firebase-user-wait"}
@@ -139,4 +141,5 @@ createRoot(document.getElementById("root")).render(<App />);
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+// serviceWorker.unregister();
+serviceWorker.register();
