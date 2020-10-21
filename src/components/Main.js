@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useFirestore } from "reactfire";
+import localforage from "localforage";
 import GunStats from "./GunStats";
 import FindFriends from "./FindFriends";
 import { InputText } from "primereact/inputtext";
@@ -19,6 +20,24 @@ export default function Main({ user }) {
 
   useEffect(() => {
     if (!userDatabaseDetails) {
+      // Unlike localStorage, you can store non-strings.
+      localforage
+        .getItem(uid)
+        .then((data) => {
+          setUserDatabaseDetails(data);
+          data.gamerTag ? setGamerTag(true) : setGamerTag(false);
+          setLoading(false);
+        })
+        .catch(function (err) {
+          // This code runs if there were any errors
+          console.log(err);
+        });
+    }
+    return () => {};
+  }, [uid, userDatabaseDetails]);
+
+  useEffect(() => {
+    if (!userDatabaseDetails) {
       const userDoc = collection.doc(uid);
       userDoc
         .get()
@@ -28,6 +47,14 @@ export default function Main({ user }) {
             doc.data().gamerTag ? setGamerTag(true) : setGamerTag(false);
             setLoading(false);
             setUserDatabaseDetails(doc.data());
+            // Unlike localStorage, you can store non-strings.
+            localforage
+              .setItem(uid, doc.data())
+              .then((data) => {
+                // This will output `1`.
+                console.log("added to local storage", data);
+              })
+              .catch((err) => console.log(err));
           } else {
             // doc.data() will be undefined in this case
             console.log("No such document!", doc);
