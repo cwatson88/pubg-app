@@ -1,21 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import localforage from "localforage";
 import { Button } from "primereact/button";
-import Stat from "./Stat";
+import Stat from "../components/Stat";
 
 export default function LifetimeStats({ gamerTag }) {
   const [statsResponse, setStatsResponse] = useState(null);
+  const [lastUpdated, setLastUpdated] = useState();
+
   function getStats(gamerTag) {
-    localforage
-      .getItem("lifetimeStats")
-      .then((data) => {
-        console.log(data);
-        setStatsResponse(data);
-      })
-      .catch(function (err) {
-        // This code runs if there were any errors
-        console.log(err);
-      });
     fetch(
       `https://pubg-rust-server-5y4ai7j7gq-ez.a.run.app/lifetime/${gamerTag}`
     )
@@ -33,13 +25,28 @@ export default function LifetimeStats({ gamerTag }) {
       });
   }
 
+  const getStatsFromLocalStorage = useCallback(async () => {
+    try {
+      const { lastUpdated, data } = localforage.getItem("lifetimeStats");
+      setLastUpdated(lastUpdated);
+      setStatsResponse(data);
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
+
+  useEffect(() => {
+    getStatsFromLocalStorage();
+  }, [getStatsFromLocalStorage]);
+
   return (
     <div style={{ display: "grid", justifyItems: "center" }}>
       <Button
         onClick={() => getStats(gamerTag)}
-        label="Get LifeTime Stats"
+        label="Update LifeTime Stats"
         className="p-button-raised"
-      />
+      />{" "}
+      <span>last updated:{lastUpdated} </span>
       <div>
         {statsResponse && (
           <div className="stat-items">

@@ -1,22 +1,18 @@
-import React, { useRef } from "react";
+import React, { Suspense, lazy } from "react";
+import { BrowserRouter as Router } from "react-router-dom";
 import { createRoot } from "react-dom";
-import "./assets/css/index.css";
-import Main from "./components/Main";
-import firebase from "firebase";
+import { FirebaseAppProvider, AuthCheck } from "reactfire";
+
 import "primereact/resources/themes/vela-orange/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
-import { Menu } from "primereact/menu";
-import { Button } from "primereact/button";
+
+// component imports
+import "./assets/css/index.css";
+import Menu from "./components/Menu";
+
 import * as serviceWorker from "./serviceWorker";
 import logo from "./assets/images/logo.webp";
-
-import {
-  FirebaseAppProvider,
-  SuspenseWithPerf,
-  useAuth,
-  useUser,
-} from "reactfire";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB4hb1gi-W3n8kmC-nRdNY-_Fyn-iCQvTI",
@@ -28,108 +24,24 @@ const firebaseConfig = {
   appId: "1:630199848571:web:c589745b458975a7ea9cde",
   measurementId: "G-KKCBE1MPK6",
 };
-function LogInButton() {
-  const auth = useAuth();
-  const logIn = () => {
-    let provider = new firebase.auth.GoogleAuthProvider();
-    provider.addScope("profile");
-    provider.addScope("email");
-
-    auth.signInWithPopup(provider); // promise is not needed
-  };
-
-  return (
-    <button
-      onClick={logIn}
-      className="google-sign-in__btn"
-      aria-label="sign in button"
-    >
-      <span>
-        <img
-          className="firebaseui-idp-icon"
-          src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
-          width="30px"
-          height="21px"
-          alt="Google Login"
-        />
-      </span>
-      <span>Sign in with Google</span>
-    </button>
-  );
-}
-
-const FirebaseAuthStateButton = () => {
-  const user = useUser();
-  return user ? <Main user={user} /> : <LogInButton />;
-};
-
-const signOut = () => {
-  firebase
-    .auth()
-    .signOut()
-    .then(function () {
-      // Sign-out successful.
-    })
-    .catch(function (error) {
-      console.error(error);
-      // An error happened.
-    });
-};
-
-const UserMenu = () => {
-  const ref = useRef(null);
-  let items = [
-    {
-      label: "Menu",
-      items: [
-        {
-          label: "Home",
-          icon: "pi pi-fw pi-home",
-          url: "/",
-        },
-      ],
-    },
-    {
-      label: "Account",
-      items: [
-        {
-          label: "Options",
-          icon: "pi pi-fw pi-cog",
-          command: () => {
-            // window.location.hash = "/";
-          },
-        },
-        { label: "Sign Out", icon: "pi pi-fw pi-power-off", command: signOut },
-      ],
-    },
-  ];
-
-  return (
-    <div id="user-menu">
-      <Menu model={items} popup ref={ref} style={{ right: 0 }} />
-      <Button
-        aria-label="user menu"
-        icon="pi pi-bars"
-        onClick={(event) => ref.current.toggle(event)}
-      />
-    </div>
-  );
-};
 
 function App() {
+  const Main = lazy(() => import("./routes/Main"));
+  const Login = lazy(() => import("./routes/Login"));
+
   return (
     <FirebaseAppProvider firebaseConfig={firebaseConfig}>
-      <UserMenu />
-      <div id="app">
-        <img src={logo} alt="title" id="header-image" />
-        {/* <h1 className="subtitle">Stat Ground</h1> */}
-        <SuspenseWithPerf
-          traceId={"firebase-user-wait"}
-          fallback={<p>loading...</p>}
-        >
-          <FirebaseAuthStateButton />
-        </SuspenseWithPerf>
-      </div>
+      <Router>
+        <Menu />
+        <div id="app">
+          <img src={logo} alt="title" id="header-image" />
+          <Suspense fallback={<div>Loading...</div>}>
+            <AuthCheck fallback={<Login />}>
+              <Main />
+            </AuthCheck>
+          </Suspense>
+        </div>
+      </Router>
     </FirebaseAppProvider>
   );
 }
