@@ -29,10 +29,9 @@ export default function Main() {
   const localGamer = wrapPromise(getGamerTag(uid));
 
   const GamerTagHeading = ({ gamerTag }) => {
-    const gt = gamerTag.read();
     return (
       <h1>
-        {gt}
+        {gamerTag}
         <span className="subtitle__small"> - {displayName}</span>
       </h1>
     );
@@ -50,45 +49,42 @@ export default function Main() {
   }, [uid]);
 
   useEffect(() => {
-    if (!userDatabaseDetails) {
-      const userDoc = collection.doc(uid);
-      userDoc
-        .get()
-        .then(function (doc) {
+    const getUser = async () => {
+      try {
+        if (!userDatabaseDetails) {
+          const userDoc = await collection.doc(uid);
+          const doc = await userDoc.get();
           if (doc.exists) {
             console.log("Document data:", doc.data());
             setUserDatabaseDetails(doc.data());
             // Unlike localStorage, you can store non-strings.
-            localforage
-              .setItem(uid, doc.data())
-              .then((data) => {
-                // This will output `1`.
-                console.log("added to local storage", data);
-              })
-              .catch((err) => console.log(err));
+            try {
+              const data = await localforage.setItem(uid, doc.data());
+              console.log("added to local storage", data);
+            } catch (error) {
+              console.error("unable to set local storage", error);
+            }
           } else {
             // doc.data() will be undefined in this case
             console.log("No such document!", doc);
-            collection
-              .doc(uid)
-              .set({
+            try {
+              await collection.doc(uid).set({
                 email,
                 displayName,
                 gamerTag: "",
                 friends: [],
-              })
-              .then(function () {
-                console.log("Document successfully written!");
-              })
-              .catch(function (error) {
-                console.error("Error writing document: ", error);
               });
+              console.log("Document successfully written!");
+            } catch (error) {
+              console.error("Error writing document: ", error);
+            }
           }
-        })
-        .catch(function (error) {
-          console.log("Error getting document:", error);
-        });
-    }
+        }
+      } catch (error) {
+        console.log("Error getting document:", error);
+      }
+    };
+    getUser();
   }, [collection, displayName, email, uid, userDatabaseDetails]);
 
   const GunStats = lazy(() => import("./GunStats"));
@@ -98,9 +94,8 @@ export default function Main() {
 
   return (
     <div className="grid--center">
-      {console.log("loaded")}
       <Suspense fallback="getting your gamer details...">
-        <GamerTagHeading gamerTag={localGamer} />
+        <GamerTagHeading gamerTag={gamerTag} />
       </Suspense>
       <div style={{ display: "grid", justifyItems: "center" }}>
         <Switch>
@@ -117,10 +112,11 @@ export default function Main() {
           </Route>
 
           <RestrictedRoute
-            auth={localGamer.read()}
+            auth={gamerTag}
             path="/lifetimestats"
             redirectURL="/account"
           >
+            {console.log("loaded lifetime stats")}
             <Suspense fallback={"getting your lifetime stats..."}>
               <LifetimeStats gamerTag={gamerTag} />
             </Suspense>

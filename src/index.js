@@ -1,7 +1,7 @@
-import React, { lazy } from "react";
+import React, { lazy, Suspense } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import { createRoot } from "react-dom";
-import { FirebaseAppProvider, AuthCheck, SuspenseWithPerf } from "reactfire";
+import { FirebaseAppProvider, AuthCheck } from "reactfire";
 
 // import "primereact/resources/themes/vela-orange/theme.css";
 // import "primereact/resources/primereact.min.css";
@@ -36,11 +36,11 @@ function App() {
         <Menu />
         <div id="app">
           <img src={logo} alt="title" id="header-image" />
-          <SuspenseWithPerf fallback={<div>Loading...</div>}>
+          <Suspense fallback={<div>Loading...</div>}>
             <AuthCheck fallback={<Login />}>
               <Main />
             </AuthCheck>
-          </SuspenseWithPerf>
+          </Suspense>
         </div>
       </Router>
     </FirebaseAppProvider>
