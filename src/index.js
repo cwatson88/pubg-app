@@ -1,14 +1,15 @@
-import React, { Suspense, lazy } from "react";
+import React, { lazy } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import { createRoot } from "react-dom";
-import { FirebaseAppProvider, AuthCheck } from "reactfire";
+import { FirebaseAppProvider, AuthCheck, SuspenseWithPerf } from "reactfire";
 
-import "primereact/resources/themes/vela-orange/theme.css";
-import "primereact/resources/primereact.min.css";
-import "primeicons/primeicons.css";
+// import "primereact/resources/themes/vela-orange/theme.css";
+// import "primereact/resources/primereact.min.css";
+// import "primeicons/primeicons.css";
 
 // component imports
 import "./assets/css/index.css";
+// import * as Menu from "./components/NewMenu";
 import Menu from "./components/Menu";
 
 import * as serviceWorker from "./serviceWorker";
@@ -35,11 +36,11 @@ function App() {
         <Menu />
         <div id="app">
           <img src={logo} alt="title" id="header-image" />
-          <Suspense fallback={<div>Loading...</div>}>
+          <SuspenseWithPerf fallback={<div>Loading...</div>}>
             <AuthCheck fallback={<Login />}>
               <Main />
             </AuthCheck>
-          </Suspense>
+          </SuspenseWithPerf>
         </div>
       </Router>
     </FirebaseAppProvider>
@@ -48,7 +49,11 @@ function App() {
 
 // Enable Concurrent Mode
 // https://reactjs.org/docs/concurrent-mode-adoption.html#enabling-concurrent-mode
-createRoot(document.getElementById("root")).render(<App />);
+createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

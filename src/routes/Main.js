@@ -98,6 +98,7 @@ export default function Main() {
 
   return (
     <div className="grid--center">
+      {console.log("loaded")}
       <Suspense fallback="getting your gamer details...">
         <GamerTagHeading gamerTag={localGamer} />
       </Suspense>
@@ -110,7 +111,7 @@ export default function Main() {
           </Route>
 
           <Route path="/friends">
-            <Suspense fallback={<h1>Loading....</h1>}>
+            <Suspense fallback={<h1>Loading ??</h1>}>
               <Friends currentFriends={userDatabaseDetails.friends} uid={uid} />
             </Suspense>
           </Route>

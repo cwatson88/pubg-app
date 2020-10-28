@@ -1,6 +1,6 @@
 import * as React from "react";
 
-function Home(props) {
+function Home(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 24 24" width="1em" height="1em" {...props}>
       <path fill="none" d="M0 0h24v24H0z" />
