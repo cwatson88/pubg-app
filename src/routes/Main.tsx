@@ -5,30 +5,45 @@ import { Switch, Route } from "react-router-dom";
 
 import { wrapPromise } from "../util";
 import RestrictedRoute from "../components/RestrictedRoute";
+import { User } from "firebase";
 
-const getGamerTag = async (uid) => {
+const getGamerTag = async (uid: string) => {
   try {
-    const data = await localforage.getItem(uid);
+    const data: UserDatabaseDetails | null = await localforage.getItem(uid);
     // This code runs once the value has been loaded
     // from the offline store.
-    return data.gamerTag;
+    return data?.gamerTag;
   } catch (err) {
     console.log(err);
   }
 };
+interface GoogleProfile {
+  email: string;
+  displayName: string;
+  uid: string;
+}
+
+interface UserDatabaseDetails extends firebase.firestore.DocumentData {
+  friends?: Array<string>;
+  gamerTag?: string;
+  [x: string]: any;
+}
 
 // Component should only show if the user is logged in
 export default function Main() {
-  const [userDatabaseDetails, setUserDatabaseDetails] = useState(false);
-  const [gamerTag, setGamerTag] = useState(null);
+  const [
+    userDatabaseDetails,
+    setUserDatabaseDetails,
+  ] = useState<UserDatabaseDetails | null>(null);
+  const [gamerTag, setGamerTag] = useState<string>("");
 
   // details from users Google profile - email, displayName, photoURL, uid
-  const { email, displayName, uid } = useUser();
+  const { email, displayName, uid }: GoogleProfile | User = useUser();
   // read the user details from Firestore based on the current user's ID
   const collection = useFirestore().collection("users");
   const localGamer = wrapPromise(getGamerTag(uid));
 
-  const GamerTagHeading = ({ gamerTag }) => {
+  const GamerTagHeading = ({ gamerTag }: { gamerTag: string }) => {
     return (
       <h1>
         {gamerTag}
@@ -39,9 +54,12 @@ export default function Main() {
 
   useEffect(() => {
     const getLocalStorage = async () => {
-      const data = localforage.getItem(uid);
+      const data:
+        | UserDatabaseDetails
+        | firebase.firestore.DocumentData
+        | null = await localforage.getItem(uid);
       setUserDatabaseDetails(data);
-      setGamerTag(data.gamerTag);
+      setGamerTag(data?.gamerTag ?? "");
       return data;
     };
 
@@ -52,11 +70,11 @@ export default function Main() {
     const getUser = async () => {
       try {
         if (!userDatabaseDetails) {
-          const userDoc = await collection.doc(uid);
+          const userDoc = collection.doc(uid);
           const doc = await userDoc.get();
           if (doc.exists) {
             console.log("Document data:", doc.data());
-            setUserDatabaseDetails(doc.data());
+            doc.data() && setUserDatabaseDetails(doc.data() || null);
             // Unlike localStorage, you can store non-strings.
             try {
               const data = await localforage.setItem(uid, doc.data());
@@ -94,44 +112,40 @@ export default function Main() {
 
   return (
     <div className="grid--center">
-      <Suspense fallback="getting your gamer details...">
+      <Suspense fallback={"loading the GT"}>
         <GamerTagHeading gamerTag={gamerTag} />
       </Suspense>
       <div style={{ display: "grid", justifyItems: "center" }}>
-        <Switch>
-          <Route path="/account" collection={collection} uid={uid}>
-            <Suspense fallback={<h1>getting your lifetime stats....</h1>}>
-              <Account />
-            </Suspense>
-          </Route>
+        <Suspense fallback={"frabbing route"}>
+          <Switch>
+            <Route path="/account" collection={collection} uid={uid}>
+              <Account collection={collection} uid={uid} />
+            </Route>
 
-          <Route path="/friends">
-            <Suspense fallback={<h1>Loading ??</h1>}>
-              <Friends currentFriends={userDatabaseDetails.friends} uid={uid} />
-            </Suspense>
-          </Route>
+            <Route path="/friends">
+              <Friends
+                currentFriends={userDatabaseDetails?.friends || []}
+                uid={uid}
+              />
+            </Route>
 
-          <RestrictedRoute
-            auth={gamerTag}
-            path="/lifetimestats"
-            redirectURL="/account"
-          >
-            {console.log("loaded lifetime stats")}
-            <Suspense fallback={"getting your lifetime stats..."}>
+            <RestrictedRoute
+              auth={gamerTag}
+              path="/lifetimestats"
+              redirectURL="/account"
+            >
               <LifetimeStats gamerTag={gamerTag} />
-            </Suspense>
-          </RestrictedRoute>
+            </RestrictedRoute>
 
-          <RestrictedRoute
-            auth={gamerTag}
-            path="/gunstats"
-            redirectURL="/account"
-          >
-            <Suspense fallback={"getting your gun stats..."}>
+            <RestrictedRoute
+              auth={gamerTag}
+              path="/gunstats"
+              redirectURL="/account"
+            >
               <GunStats gamerTag={gamerTag} />
-            </Suspense>
-          </RestrictedRoute>
-        </Switch>
+            </RestrictedRoute>
+          </Switch>
+        </Suspense>
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Home from "./icons/Home";
 import Settings from "./icons/Settings";
 import SignOut from "./icons/SignOut";
+import "../assets/css/menu.css";
 
 interface MenuItems {
   subMenu: string;

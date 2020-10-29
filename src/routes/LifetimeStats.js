@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import localforage from "localforage";
-import { Button } from "primereact/button";
 import Stat from "../components/Stat";
+import Button from "../components/Button";
 
 export default function LifetimeStats({ gamerTag }) {
   const [statsResponse, setStatsResponse] = useState(null);
@@ -41,11 +41,10 @@ export default function LifetimeStats({ gamerTag }) {
 
   return (
     <div style={{ display: "grid", justifyItems: "center" }}>
-      <Button
-        onClick={() => getStats(gamerTag)}
-        label="Update LifeTime Stats"
-        className="p-button-raised"
-      />{" "}
+      {console.log("loaded lifetime stats")}
+      <Button onClick={() => getStats(gamerTag)} className="p-button-raised">
+        Update LifeTime Stats
+      </Button>
       <span>last updated:{lastUpdated} </span>
       <div>
         {statsResponse && (

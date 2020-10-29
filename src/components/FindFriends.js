@@ -1,10 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useFirestore } from "reactfire";
 
-import { InputText } from "primereact/inputtext";
-import { Button } from "primereact/button";
-import { Toast } from "primereact/toast";
-
 export default function FindFriends({ uid, currentFriends = [] }) {
   const [friend, setFriend] = useState("");
   const [playerList, setPlayerList] = useState([]);

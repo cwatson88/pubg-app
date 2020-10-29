@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button } from "primereact/button";
+import Button from "../components/Button";
 import localforage from "localforage";
 
 export default function GunStats({ gamerTag }) {
@@ -48,11 +48,9 @@ export default function GunStats({ gamerTag }) {
   };
   return (
     <div style={{ marginBottom: "15px" }}>
-      <Button
-        onClick={() => getStats(gamerTag)}
-        label="Get top 5 guns"
-        className="p-button-raised"
-      />
+      <Button onClick={() => getStats(gamerTag)} className="p-button-raised">
+        Get top 5 guns
+      </Button>
       <div>{statsResponse && <Guns guns={statsResponse} />}</div>
     </div>
   );

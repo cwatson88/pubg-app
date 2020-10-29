@@ -3,14 +3,10 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { createRoot } from "react-dom";
 import { FirebaseAppProvider, AuthCheck } from "reactfire";
 
-// import "primereact/resources/themes/vela-orange/theme.css";
-// import "primereact/resources/primereact.min.css";
-// import "primeicons/primeicons.css";
-
 // component imports
 import "./assets/css/index.css";
-// import * as Menu from "./components/NewMenu";
-import Menu from "./components/Menu";
+import Menu from "./components/NewMenu";
+// import Menu from "./components/Menu";
 
 import * as serviceWorker from "./serviceWorker";
 import logo from "./assets/images/logo.webp";

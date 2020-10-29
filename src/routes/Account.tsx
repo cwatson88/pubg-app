@@ -1,10 +1,16 @@
 import React, { useState } from "react";
-import { InputText } from "primereact/inputtext";
-import { Button } from "primereact/button";
+import Button from "../components/Button";
 
-function GamerTagInput({ collection, uid }) {
+interface AccountProps {
+  collection: firebase.firestore.CollectionReference<
+    firebase.firestore.DocumentData
+  >;
+  uid: string;
+}
+const InputText = (props: any) => <input {...props}></input>;
+function GamerTagInput({ collection, uid }: AccountProps) {
   const [gamerTagInput, setGamerTagInput] = useState("");
-  function updateGamerTag(gamerTag) {
+  function updateGamerTag(gamerTag: string) {
     // will need to wrap this in a try catch and show that the gamertag has been added
     try {
       collection
@@ -28,15 +34,15 @@ function GamerTagInput({ collection, uid }) {
       <InputText
         id="gamer-tag-input"
         value={gamerTagInput}
-        onChange={(e) => setGamerTagInput(e.target.value)}
+        onChange={(e: any) => setGamerTagInput(e.target.value)}
         style={{ marginRight: "5px" }}
       />
 
-      <Button label="Submit" onClick={() => updateGamerTag(gamerTagInput)} />
+      <Button onClick={() => updateGamerTag(gamerTagInput)}>Submit</Button>
     </div>
   );
 }
-export default function Account({ collection, uid }) {
+export default function Account({ collection, uid }: AccountProps) {
   return (
     <div>
       <GamerTagInput collection={collection} uid={uid}></GamerTagInput>

@@ -1,0 +1,35 @@
+.burger-menu {
+  -surface-a: #1f2d40;
+  --surface-b: #17212f;
+  --surface-c: hsla(0, 0%, 100%, 0.03);
+  --surface-d: #304562;
+  --surface-e: #1f2d40;
+  --surface-f: #1f2d40;
+  --text-color: hsla(0, 0%, 100%, 0.87);
+  --text-color-secondary: hsla(0, 0%, 100%, 0.6);
+  --primary-color: #ffd54f;
+  --primary-color-text: #212529;
+  --font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica,
+    Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  -webkit-font-smoothing: antialiased;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 1rem;
+  font-weight: 400;
+  width: 12.5rem;
+  padding: 0.25rem 0;
+  color: hsla(0, 0%, 100%, 0.87);
+  border-radius: 3px;
+  box-sizing: border-box;
+  transform: none;
+  position: absolute;
+  background: #1f2d40;
+  border: 1px solid #304562;
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14),
+    0 1px 10px 0 rgba(0, 0, 0, 0.12);
+  right: 0px;
+  z-index: 1001;
+  transform-origin: center top;
+  top: 40px;
+  left: 4px;
+}
