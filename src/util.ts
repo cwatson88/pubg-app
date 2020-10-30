@@ -1,13 +1,13 @@
 // used to make suspense work for data fetching
-export function wrapPromise(promise) {
+export function wrapPromise(promise: Promise<any>) {
   let status = "pending";
-  let result;
+  let result: any;
   let suspender = promise.then(
-    (r) => {
+    (r: any) => {
       status = "success";
       result = r;
     },
-    (e) => {
+    (e: any) => {
       status = "error";
       result = e;
     }

@@ -1,35 +1,103 @@
-.burger-menu {
-  -surface-a: #1f2d40;
-  --surface-b: #17212f;
-  --surface-c: hsla(0, 0%, 100%, 0.03);
-  --surface-d: #304562;
-  --surface-e: #1f2d40;
-  --surface-f: #1f2d40;
-  --text-color: hsla(0, 0%, 100%, 0.87);
-  --text-color-secondary: hsla(0, 0%, 100%, 0.6);
+@import "./theme.css";
+:root {
+  --font-color-primary: #ffffff;
+  --font-color-secondary: #212529;
   --primary-color: #ffd54f;
-  --primary-color-text: #212529;
-  --font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica,
-    Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
-  -webkit-font-smoothing: antialiased;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
-    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --secondary-color: rgb(31, 45, 64);
+  --tertiary-color: #ff0000;
+}
+.menu-wrapper {
+  position: absolute;
+}
+.burger-menu {
+  font-family: var(--font-family);
   font-size: 1rem;
   font-weight: 400;
   width: 12.5rem;
   padding: 0.25rem 0;
-  color: hsla(0, 0%, 100%, 0.87);
+  color: var(--font-color-primary);
   border-radius: 3px;
   box-sizing: border-box;
   transform: none;
-  position: absolute;
-  background: #1f2d40;
+  position: relative;
+  background: var(--secondary-color);
   border: 1px solid #304562;
   box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14),
     0 1px 10px 0 rgba(0, 0, 0, 0.12);
   right: 0px;
   z-index: 1001;
   transform-origin: center top;
-  top: 40px;
+  top: 55px;
   left: 4px;
+  padding-top: 20px;
+  padding-left: 5px;
+  transition: left 2s;
+}
+
+.burger-menu h3 {
+  color: var(--font-color-primary);
+  margin: 0;
+  padding: 0;
+  font-size: 1em;
+}
+.burger-menu a {
+  color: var(--font-color-primary);
+  text-decoration: none;
+}
+
+.burger-menu li {
+  list-style-type: none;
+  margin-bottom: 10px;
+  width: 100%;
+}
+.burger-menu li:hover {
+  cursor: pointer;
+  background-color: #ffd54f;
+}
+.burger-menu a:hover {
+  color: var(--font-color-secondary);
+}
+.burger-menu li:hover > svg {
+  fill: var(--font-color-secondary);
+}
+
+.burger-menu ul {
+  display: contents;
+  padding: 0 15px;
+  align-items: baseline;
+}
+.burger-menu li svg {
+  margin: 0 10px;
+  width: 1.5em;
+  height: auto;
+  position: relative;
+  top: 5px;
+  fill: var(--font-color-primary);
+}
+
+.menu__burger-icon {
+  background-color: var(--primary-color);
+  border-radius: 4px;
+  /* fill: var(--font-color-secondary); */
+  /* height: 43px; */
+  /* width: 20px; */
+  /* padding: 7px; */
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  z-index: 999;
+}
+.menu__close-icon {
+  fill: red;
+  position: absolute;
+  right: 1px;
+  top: 1px;
+}
+
+.burger-menu__visible {
+}
+.burger-menu__hidden {
+  display: none;
+  left: -1000;
+  transition: left 2s, display 2s;
 }

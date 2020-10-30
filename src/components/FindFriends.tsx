@@ -1,9 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useFirestore } from "reactfire";
+import Button from "../components/Button";
 
-export default function FindFriends({ uid, currentFriends = [] }) {
+export default function FindFriends({
+  uid,
+  currentFriends = [],
+}: {
+  uid: string;
+  currentFriends: string[];
+}) {
   const [friend, setFriend] = useState("");
-  const [playerList, setPlayerList] = useState([]);
+  const [playerList, setPlayerList] = useState<string[]>([]);
 
   const toastRef = useRef(null);
 
@@ -13,7 +20,7 @@ export default function FindFriends({ uid, currentFriends = [] }) {
   useEffect(() => {
     const searchFriend = async () => {
       const res = await fireStore.collection("users").get();
-      const searchResults = res.docs.reduce((prev, curr) => {
+      const searchResults = res.docs.reduce((prev: string[], curr) => {
         const { gamerTag } = curr.data();
         const matched = gamerTag.toLowerCase().includes(friend.toLowerCase());
         if (matched) {
@@ -33,33 +40,17 @@ export default function FindFriends({ uid, currentFriends = [] }) {
   }, [friend, fireStore]);
 
   // TODO:!currently can add the same person twice
-  const addFriend = (friend) => {
-    userCollection
-      .doc(uid)
-      .get()
-      .then((doc) => {
-        if (doc.exists) {
-          const currentFriends = doc.data().friends;
-          const friends = [...currentFriends, friend];
-          userCollection
-            .doc(uid)
-            .set({ friends }, { merge: true })
-            .then(() =>
-              toastRef.current.show({
-                severity: "success",
-                summary: "Friend Added",
-                detail: "😎 new friend! Lets go!!!",
-              })
-            )
-            .catch((err) =>
-              toastRef.current.show({
-                severity: "error",
-                summary: "Friend not added",
-                detail: `User was not added due to the error: ${err}`,
-              })
-            );
-        }
-      });
+  const addFriend = async (friend: string) => {
+    try {
+      const doc = await userCollection.doc(uid).get();
+      if (doc.exists) {
+        const currentFriends = doc.data()?.friends;
+        const friends = [...currentFriends, friend];
+        userCollection.doc(uid).set({ friends }, { merge: true });
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -69,7 +60,7 @@ export default function FindFriends({ uid, currentFriends = [] }) {
       <br></br>
       <span className="p-input-icon-left">
         <i className="pi pi-search" />
-        <InputText
+        <input
           value={friend}
           onChange={(e) => setFriend(e.target.value)}
           placeholder="Find Stadia Friends"
@@ -88,7 +79,6 @@ export default function FindFriends({ uid, currentFriends = [] }) {
           ) : (
             <Button
               onClick={() => addFriend(player)}
-              icon="pi pi-check"
               className="p-button-rounded button-icon__small"
               style={{ height: "20px", width: "20px" }}
               id="add-friend"
@@ -96,7 +86,6 @@ export default function FindFriends({ uid, currentFriends = [] }) {
           )}
         </div>
       ))}
-      <Toast ref={toastRef} />
     </div>
   );
 }

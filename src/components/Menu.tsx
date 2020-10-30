@@ -1,10 +1,11 @@
 import React, { ReactElement, useState } from "react";
 import firebase from "firebase";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import Home from "./icons/Home";
 import Settings from "./icons/Settings";
 import SignOut from "./icons/SignOut";
 import "../assets/css/menu.css";
+import { Squash as Hamburger } from "hamburger-react";
 
 interface MenuItems {
   subMenu: string;
@@ -31,35 +32,6 @@ const signOut = () => {
 
 export default function BurgerMenu() {
   const [menuVisible, setMenuVisible] = useState(false);
-
-  const BurgerIcon = () => (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="burger-icon"
-      viewBox="0 0 24 24"
-      fill="white"
-      width="18px"
-      height="18px"
-      onClick={() => setMenuVisible(true)}
-    >
-      <path d="M0 0h24v24H0z" fill="none" />
-      <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
-    </svg>
-  );
-
-  const CloseIcon = () => (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="close-icon"
-      height="24"
-      viewBox="0 0 24 24"
-      width="24"
-      onClick={() => setMenuVisible(false)}
-    >
-      <path d="M0 0h24v24H0z" fill="none" />
-      <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
-    </svg>
-  );
 
   const menuItems: MenuItems[] = [
     {
@@ -101,8 +73,18 @@ export default function BurgerMenu() {
   ];
 
   return (
-    <div>
-      <BurgerIcon />
+    <div className="menu-wrapper">
+      {/* <BurgerIcon /> */}
+      <div className="menu__burger-icon">
+        <Hamburger
+          color="#000"
+          size={15}
+          onToggle={(toggled) => {
+            toggled ? setMenuVisible(true) : setMenuVisible(false);
+          }}
+        />
+      </div>
+
       <div
         className={
           menuVisible
@@ -110,26 +92,27 @@ export default function BurgerMenu() {
             : "burger-menu burger-menu__hidden"
         }
       >
-        <CloseIcon />
         {menuItems.map(({ subMenu, items }) => (
-          <>
+          <div key={subMenu}>
             <h3>{subMenu}</h3>
             <ul>
-              {items.map(({ label, url = "", icon: Icon, command }) => (
-                <li
-                  onClick={() => {
-                    setMenuVisible(false);
-                    command && command();
-                  }}
-                >
-                  {/* <Icon /> */}
-                  <Link key={label} className="menu-item" to={url}>
+              {items.map(({ label, url = "", icon, command }) => (
+                <NavLink key={label} to={url}>
+                  <li
+                    key={label}
+                    onClick={() => {
+                      setMenuVisible(false);
+                      command && command();
+                    }}
+                  >
+                    {icon}
+
                     {label}
-                  </Link>
-                </li>
+                  </li>
+                </NavLink>
               ))}
             </ul>
-          </>
+          </div>
         ))}
       </div>
     </div>

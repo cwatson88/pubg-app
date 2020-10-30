@@ -1,12 +1,11 @@
 import React, { lazy, Suspense } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
-import { createRoot } from "react-dom";
+import ReactDOM from "react-dom";
 import { FirebaseAppProvider, AuthCheck } from "reactfire";
 
 // component imports
 import "./assets/css/index.css";
-import Menu from "./components/NewMenu";
-// import Menu from "./components/Menu";
+import Menu from "./components/Menu";
 
 import * as serviceWorker from "./serviceWorker";
 import logo from "./assets/images/logo.webp";
@@ -45,7 +44,7 @@ function App() {
 
 // Enable Concurrent Mode
 // https://reactjs.org/docs/concurrent-mode-adoption.html#enabling-concurrent-mode
-createRoot(document.getElementById("root")).render(
+ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <App />
   </React.StrictMode>

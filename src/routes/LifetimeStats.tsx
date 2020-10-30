@@ -3,11 +3,19 @@ import localforage from "localforage";
 import Stat from "../components/Stat";
 import Button from "../components/Button";
 
-export default function LifetimeStats({ gamerTag }) {
-  const [statsResponse, setStatsResponse] = useState(null);
+interface PUBGStats {
+  "total-stats": Array<{
+    friendly_name: string;
+    value: number;
+    category: string;
+  }>;
+}
+
+export default function LifetimeStats({ gamerTag }: { gamerTag: string }) {
+  const [statsResponse, setStatsResponse] = useState<PUBGStats | null>(null);
   const [lastUpdated, setLastUpdated] = useState();
 
-  function getStats(gamerTag) {
+  function getStats(gamerTag: string) {
     fetch(
       `https://pubg-rust-server-5y4ai7j7gq-ez.a.run.app/lifetime/${gamerTag}`
     )
@@ -27,7 +35,9 @@ export default function LifetimeStats({ gamerTag }) {
 
   const getStatsFromLocalStorage = useCallback(async () => {
     try {
-      const { lastUpdated, data } = localforage.getItem("lifetimeStats");
+      const { lastUpdated, data } = await localforage.getItem<any>(
+        "lifetimeStats"
+      );
       setLastUpdated(lastUpdated);
       setStatsResponse(data);
     } catch (error) {
