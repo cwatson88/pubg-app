@@ -5,6 +5,7 @@ import Home from "./icons/Home";
 import Settings from "./icons/Settings";
 import SignOut from "./icons/SignOut";
 import "../assets/css/menu.css";
+// https://hamburger-react.netlify.app/
 import { Squash as Hamburger } from "hamburger-react";
 
 interface MenuItems {
