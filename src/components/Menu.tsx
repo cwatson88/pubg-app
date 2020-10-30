@@ -80,9 +80,8 @@ export default function BurgerMenu() {
         <Hamburger
           color="#000"
           size={15}
-          onToggle={(toggled) => {
-            toggled ? setMenuVisible(true) : setMenuVisible(false);
-          }}
+          toggled={menuVisible}
+          toggle={setMenuVisible}
         />
       </div>
 
