@@ -97,7 +97,7 @@
 .burger-menu__visible {
 }
 .burger-menu__hidden {
-  display: none;
-  left: -1000;
-  transition: left 2s, display 2s;
+  /* display: none; */
+  transform: translateX(-900px);
+  transition: transform 2s;
 }
