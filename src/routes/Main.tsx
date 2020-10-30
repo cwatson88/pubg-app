@@ -3,20 +3,10 @@ import { useFirestore, useUser } from "reactfire";
 import localforage from "localforage";
 import { Switch, Route } from "react-router-dom";
 
-import { wrapPromise } from "../util";
+// import { wrapPromise } from "../util";
 import RestrictedRoute from "../components/RestrictedRoute";
 import { User } from "firebase";
 
-const getGamerTag = async (uid: string) => {
-  try {
-    const data: UserDatabaseDetails | null = await localforage.getItem(uid);
-    // This code runs once the value has been loaded
-    // from the offline store.
-    return data?.gamerTag;
-  } catch (err) {
-    console.log(err);
-  }
-};
 interface GoogleProfile {
   email: string;
   displayName: string;
@@ -41,7 +31,8 @@ export default function Main() {
   const { email, displayName, uid }: GoogleProfile | User = useUser();
   // read the user details from Firestore based on the current user's ID
   const collection = useFirestore().collection("users");
-  const localGamer = wrapPromise(getGamerTag(uid));
+  // TODO:Look back at this for suspense
+  // const localGamer = wrapPromise(getGamerTag(uid));
 
   const GamerTagHeading = ({ gamerTag }: { gamerTag: string }) => {
     return (

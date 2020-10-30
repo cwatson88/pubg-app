@@ -7,5 +7,9 @@ interface FriendProps {
 }
 
 export default function Friends({ currentFriends = [], uid }: FriendProps) {
-  return <div></div>;
+  return (
+    <div>
+      <FindFriends currentFriends={currentFriends} uid={uid} />
+    </div>
+  );
 }

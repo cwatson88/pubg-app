@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useFirestore } from "reactfire";
 import Button from "../components/Button";
 
@@ -11,8 +11,6 @@ export default function FindFriends({
 }) {
   const [friend, setFriend] = useState("");
   const [playerList, setPlayerList] = useState<string[]>([]);
-
-  const toastRef = useRef(null);
 
   const fireStore = useFirestore();
   const userCollection = useFirestore().collection("users");

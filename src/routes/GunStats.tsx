@@ -53,7 +53,7 @@ export default function GunStats({ gamerTag }: { gamerTag: string }) {
 
   const setLocalStats = async (topGuns: TopGuns) => {
     try {
-      const res = await localforage.setItem("topGuns", topGuns);
+      await localforage.setItem("topGuns", topGuns);
       console.log("added to local storage", topGuns);
     } catch (error) {
       console.error("could not add data to local storage", error);

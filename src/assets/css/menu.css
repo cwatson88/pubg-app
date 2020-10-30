@@ -94,8 +94,8 @@
   top: 1px;
 }
 
-.burger-menu__visible {
-}
+/* .burger-menu__visible {
+} */
 .burger-menu__hidden {
   /* display: none; */
   transform: translateX(-900px);
