@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useFirestore } from "reactfire";
 import Button from "../components/Button";
+import type { FriendProps } from "../types";
 
-export default function FindFriends({
-  uid,
-  currentFriends = [],
-}: {
-  uid: string;
-  currentFriends: string[];
-}) {
+export default function FindFriends({ uid, currentFriends = [] }: FriendProps) {
   const [friend, setFriend] = useState("");
   const [playerList, setPlayerList] = useState<string[]>([]);
 

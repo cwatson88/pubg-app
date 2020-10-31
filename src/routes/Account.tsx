@@ -1,5 +1,9 @@
+import { User } from "firebase";
 import React, { useState } from "react";
+import { useUser } from "reactfire";
 import Button from "../components/Button";
+import type { GoogleProfile } from "../types";
+import { updateLocalStorage } from "../util";
 
 interface AccountProps {
   collection: firebase.firestore.CollectionReference<
@@ -8,26 +12,29 @@ interface AccountProps {
   uid: string;
 }
 const InputText = (props: any) => <input {...props}></input>;
+
 function GamerTagInput({ collection, uid }: AccountProps) {
   const [gamerTagInput, setGamerTagInput] = useState("");
-  function updateGamerTag(gamerTag: string) {
+  const data: GoogleProfile | User = useUser();
+
+  const updateGamerTag = async (gamerTag: string) => {
     // will need to wrap this in a try catch and show that the gamertag has been added
     try {
-      collection
-        .doc(uid)
-        .set(
-          {
-            gamerTag,
-          },
-          { merge: true }
-        )
-        .then(() => {
-          // redirect to the stats page
-        });
+      // set localstorage
+      updateLocalStorage(uid, { gamerTag });
+      // set Firebase
+      await collection.doc(uid).set(
+        {
+          gamerTag,
+        },
+        { merge: true }
+      );
+
+      // TODO: add a success method or message or redirect
     } catch (error) {
       console.error(error);
     }
-  }
+  };
   return (
     <div>
       <h3>Add your gamer tag to begin!</h3>

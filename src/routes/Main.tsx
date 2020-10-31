@@ -3,21 +3,29 @@ import { useFirestore, useUser } from "reactfire";
 import localforage from "localforage";
 import { Switch, Route } from "react-router-dom";
 
-// import { wrapPromise } from "../util";
+import { wrapPromise } from "../util";
 import RestrictedRoute from "../components/RestrictedRoute";
 import { User } from "firebase";
+import type { GoogleProfile, UserDatabaseDetails } from "../types";
 
-interface GoogleProfile {
-  email: string;
-  displayName: string;
-  uid: string;
-}
-
-interface UserDatabaseDetails extends firebase.firestore.DocumentData {
-  friends?: Array<string>;
-  gamerTag?: string;
-  [x: string]: any;
-}
+const GamerTagHeading = ({
+  localGamer,
+  // gamerTag,
+  displayName,
+}: {
+  localGamer: any;
+  // gamerTag: UserDatabaseDetails["gamerTag"];
+  displayName: GoogleProfile["displayName"] | null;
+}) => {
+  const { gamerTag } = localGamer.data?.read();
+  console.log(gamerTag);
+  return (
+    <h1>
+      {gamerTag}
+      <span className="subtitle__small"> - {displayName}</span>
+    </h1>
+  );
+};
 
 // Component should only show if the user is logged in
 export default function Main() {
@@ -25,37 +33,48 @@ export default function Main() {
     userDatabaseDetails,
     setUserDatabaseDetails,
   ] = useState<UserDatabaseDetails | null>(null);
-  const [gamerTag, setGamerTag] = useState<string>("");
 
-  // details from users Google profile - email, displayName, photoURL, uid
   const { email, displayName, uid }: GoogleProfile | User = useUser();
   // read the user details from Firestore based on the current user's ID
   const collection = useFirestore().collection("users");
-  // TODO:Look back at this for suspense
-  // const localGamer = wrapPromise(getGamerTag(uid));
 
-  const GamerTagHeading = ({ gamerTag }: { gamerTag: string }) => {
-    return (
-      <h1>
-        {gamerTag}
-        <span className="subtitle__small"> - {displayName}</span>
-      </h1>
-    );
+  const getLocalStorage = (uid: string) => {
+    try {
+      const data = localforage.getItem<UserDatabaseDetails>(uid);
+
+      return {
+        data: wrapPromise(data),
+      };
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  useEffect(() => {
-    const getLocalStorage = async () => {
-      const data:
-        | UserDatabaseDetails
-        | firebase.firestore.DocumentData
-        | null = await localforage.getItem(uid);
-      setUserDatabaseDetails(data);
-      setGamerTag(data?.gamerTag ?? "");
-      return data;
-    };
+  const createFirebaseUser = async () => {
+    // const { email, displayName, uid }: GoogleProfile | User = useUser();
+    try {
+      await collection.doc(uid).set({
+        email,
+        displayName,
+        gamerTag: "",
+        friends: [],
+      });
+      console.log("Document successfully written!");
+    } catch (error) {
+      console.error("Error writing document: ", error);
+    }
+  };
 
-    getLocalStorage();
-  }, [uid]);
+  const setLocalStorage = async (docData: firebase.firestore.DocumentData) => {
+    try {
+      console.log("Document data:", docData);
+      // Unlike localStorage, you can store non-strings.
+      const data = await localforage.setItem(uid, docData);
+      console.log("added to local storage", data);
+    } catch (error) {
+      console.error("unable to set local storage", error);
+    }
+  };
 
   useEffect(() => {
     const getUser = async () => {
@@ -64,29 +83,13 @@ export default function Main() {
           const userDoc = collection.doc(uid);
           const doc = await userDoc.get();
           if (doc.exists) {
-            console.log("Document data:", doc.data());
-            doc.data() && setUserDatabaseDetails(doc.data() || null);
-            // Unlike localStorage, you can store non-strings.
-            try {
-              const data = await localforage.setItem(uid, doc.data());
-              console.log("added to local storage", data);
-            } catch (error) {
-              console.error("unable to set local storage", error);
-            }
+            // TODO: work out how to handle the use case if there is not any data returned
+            const data = doc.data();
+            data && setLocalStorage(data);
           } else {
             // doc.data() will be undefined in this case
             console.log("No such document!", doc);
-            try {
-              await collection.doc(uid).set({
-                email,
-                displayName,
-                gamerTag: "",
-                friends: [],
-              });
-              console.log("Document successfully written!");
-            } catch (error) {
-              console.error("Error writing document: ", error);
-            }
+            createFirebaseUser();
           }
         }
       } catch (error) {
@@ -96,6 +99,8 @@ export default function Main() {
     getUser();
   }, [collection, displayName, email, uid, userDatabaseDetails]);
 
+  const localGamer = getLocalStorage(uid);
+
   const GunStats = lazy(() => import("./GunStats"));
   const LifetimeStats = lazy(() => import("./LifetimeStats"));
   const Friends = lazy(() => import("./Friends"));
@@ -104,10 +109,10 @@ export default function Main() {
   return (
     <div className="grid--center">
       <Suspense fallback={"loading the GT"}>
-        <GamerTagHeading gamerTag={gamerTag} />
+        <GamerTagHeading localGamer={localGamer} displayName={displayName} />
       </Suspense>
       <div style={{ display: "grid", justifyItems: "center" }}>
-        <Suspense fallback={"frabbing route"}>
+        <Suspense fallback={"loading route"}>
           <Switch>
             <Route path="/account" collection={collection} uid={uid}>
               <Account collection={collection} uid={uid} />
@@ -121,20 +126,18 @@ export default function Main() {
             </Route>
 
             <RestrictedRoute
-              auth={gamerTag}
+              auth={localGamer}
               path="/lifetimestats"
               redirectURL="/account"
-            >
-              <LifetimeStats gamerTag={gamerTag} />
-            </RestrictedRoute>
+              render={(props: any) => <LifetimeStats {...props} />}
+            />
 
             <RestrictedRoute
-              auth={gamerTag}
+              auth={localGamer}
               path="/gunstats"
               redirectURL="/account"
-            >
-              <GunStats gamerTag={gamerTag} />
-            </RestrictedRoute>
+              render={(props: any) => <GunStats {...props} />}
+            />
           </Switch>
         </Suspense>
       </div>

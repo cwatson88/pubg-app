@@ -1,3 +1,5 @@
+import localforage from "localforage";
+
 // used to make suspense work for data fetching
 export function wrapPromise(promise: Promise<any>) {
   let status = "pending";
@@ -23,4 +25,15 @@ export function wrapPromise(promise: Promise<any>) {
       }
     },
   };
+}
+
+export async function updateLocalStorage(key: string, newValue: any) {
+  try {
+    const currentValue: any = await localforage.getItem(key);
+    const updatedValue = { ...currentValue, ...newValue };
+    const res = await localforage.setItem(key, updatedValue);
+    return res;
+  } catch (error) {
+    return error;
+  }
 }

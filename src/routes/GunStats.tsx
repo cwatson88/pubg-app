@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "../components/Button";
 import localforage from "localforage";
 
@@ -22,8 +22,12 @@ const Guns = ({ guns }: { guns: TopGuns }) => {
 export default function GunStats({ gamerTag }: { gamerTag: string }) {
   const [statsResponse, setStatsResponse] = useState<TopGuns>([]);
 
-  const getStats = async (gamerTag: string) => {
+  useEffect(() => {
     getLocalStats();
+  }, []);
+
+  const getStats = async (gamerTag: string) => {
+    await getLocalStats();
     await fetchStats(gamerTag);
   };
 
