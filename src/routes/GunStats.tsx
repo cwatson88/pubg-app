@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Button from "../components/Button";
 import localforage from "localforage";
+import { LastUpdated, useLastUpdated } from "../components/LastUpdated";
 
 type TopGuns = Array<{ gun: string; kills: string }>;
 
@@ -21,6 +22,7 @@ const Guns = ({ guns }: { guns: TopGuns }) => {
 
 export default function GunStats({ gamerTag }: { gamerTag: string }) {
   const [statsResponse, setStatsResponse] = useState<TopGuns>([]);
+  const [getLastUpdated, setLastUpdated] = useLastUpdated("gunStats");
 
   useEffect(() => {
     getLocalStats();
@@ -29,6 +31,8 @@ export default function GunStats({ gamerTag }: { gamerTag: string }) {
   const getStats = async (gamerTag: string) => {
     await getLocalStats();
     await fetchStats(gamerTag);
+
+    setLastUpdated(new Date());
   };
 
   const getLocalStats = async () => {
@@ -69,6 +73,7 @@ export default function GunStats({ gamerTag }: { gamerTag: string }) {
       <Button onClick={() => getStats(gamerTag)} className="p-button-raised">
         Get top 5 guns
       </Button>
+      <LastUpdated date={getLastUpdated}></LastUpdated>
       <div>{statsResponse && <Guns guns={statsResponse} />}</div>
     </div>
   );

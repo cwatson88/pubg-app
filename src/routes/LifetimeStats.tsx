@@ -15,9 +15,7 @@ export default function LifetimeStats({ gamerTag }: { gamerTag: string }) {
         `https://pubg-rust-server-5y4ai7j7gq-ez.a.run.app/lifetime/${gamerTag}`
       );
       const data = await response.json();
-      const currentDate = new Date();
-      const updatedDate = currentDate.toUTCString();
-      setLastUpdated(updatedDate);
+      setLastUpdated(new Date());
       console.log(data);
       setStatsResponse(data);
 
@@ -47,7 +45,7 @@ export default function LifetimeStats({ gamerTag }: { gamerTag: string }) {
       <Button onClick={() => getStats(gamerTag)} className="p-button-raised">
         Update LifeTime Stats
       </Button>
-      <LastUpdated>{lastUpdatedAt}</LastUpdated>
+      <LastUpdated date={lastUpdatedAt}></LastUpdated>
       <div>
         {statsResponse && (
           <div className="stat-items">
