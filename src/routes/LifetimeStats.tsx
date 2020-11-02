@@ -3,13 +3,11 @@ import localforage from "localforage";
 import Stat from "../components/Stat";
 import Button from "../components/Button";
 import type { PUBGStats } from "../types";
-import useLastUpdated from "../components/LastUpdated";
+import { useLastUpdated, LastUpdated } from "../components/LastUpdated";
 
 export default function LifetimeStats({ gamerTag }: { gamerTag: string }) {
   const [statsResponse, setStatsResponse] = useState<PUBGStats | null>(null);
-  const [lastUpdated, setLastUpdated, LastUpdatedAt] = useLastUpdated(
-    "weaponStats"
-  );
+  const [lastUpdatedAt, setLastUpdated] = useLastUpdated("weaponStats");
 
   const getStats = async (gamerTag: string) => {
     try {
@@ -19,8 +17,7 @@ export default function LifetimeStats({ gamerTag }: { gamerTag: string }) {
       const data = await response.json();
       const currentDate = new Date();
       const updatedDate = currentDate.toUTCString();
-      const lastUpdatedDate = { weaponStats: updatedDate };
-      setLastUpdated(lastUpdatedDate);
+      setLastUpdated(updatedDate);
       console.log(data);
       setStatsResponse(data);
 
@@ -50,7 +47,7 @@ export default function LifetimeStats({ gamerTag }: { gamerTag: string }) {
       <Button onClick={() => getStats(gamerTag)} className="p-button-raised">
         Update LifeTime Stats
       </Button>
-      <LastUpdatedAt lastUpdated={lastUpdated}></LastUpdatedAt>
+      <LastUpdated>{lastUpdatedAt}</LastUpdated>
       <div>
         {statsResponse && (
           <div className="stat-items">
