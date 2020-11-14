@@ -1,0 +1,23 @@
+@import url("https://fonts.googleapis.com/css2?family=Overpass:wght@100;200;400&display=swap");
+:root {
+  --font-color-primary: #212529;
+  --font-color-secondary: white;
+  --primary-color: #ffd54f;
+  --secondary-color: #1f2d40;
+  --tertiary-color: red;
+
+  --surface-a: #1f2d40;
+  --surface-b: #17212f;
+  --surface-c: hsla(0, 0%, 100%, 0.03);
+  --surface-d: #304562;
+  --surface-e: #1f2d40;
+  --surface-f: #1f2d40;
+  --text-color: hsla(0, 0%, 100%, 0.87);
+  --text-color-secondary: hsla(0, 0%, 100%, 0.829);
+  --primary-color: #ffd54f;
+  --primary-color-text: #212529;
+  --font-family: "Overpass", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
