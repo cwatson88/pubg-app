@@ -5,41 +5,37 @@ import { LastUpdated, useLastUpdated } from "../components/LastUpdated";
 
 type TopGuns = Array<{ gun: string; kills: string }>;
 
-// Guns component
-const Guns = ({ guns }: { guns: TopGuns }) => {
-  return (
-    <ol className="gun-list">
-      {guns.map(({ gun, kills }) => (
-        <li key={gun}>
-          <span>
-            {gun} - {kills} <i>kills</i>
-          </span>
-        </li>
-      ))}
-    </ol>
-  );
-};
+const GunStats = React.memo(GunStatsMemo);
+export default GunStats;
 
-export default function GunStats({ gamerTag }: { gamerTag: string }) {
+function GunStatsMemo({ gamerTag }: { gamerTag: string }) {
   const [statsResponse, setStatsResponse] = useState<TopGuns>([]);
   const [getLastUpdated, setLastUpdated] = useLastUpdated("gunStats");
 
   useEffect(() => {
     getLocalStats();
+    localforage.getItem("lastUpdated").then((value: any) => {
+      console.log(value.gunStats);
+      value.gunStats === "never" &&
+        localforage.setItem("lastUpdated", {
+          ...value,
+          ...{ gunStats: new Date() },
+        });
+    });
   }, []);
 
   const getStats = async (gamerTag: string) => {
-    await getLocalStats();
+    // await getLocalStats();
     await fetchStats(gamerTag);
-
     setLastUpdated(new Date());
+    // setLocalStats(stats);
   };
 
   const getLocalStats = async () => {
     try {
-      const topGuns = (await localforage.getItem<TopGuns>("topGuns")) ?? [];
+      const topGuns = await localforage.getItem<TopGuns>("topGuns");
       console.log(topGuns);
-      setStatsResponse(topGuns);
+      topGuns && setStatsResponse(topGuns);
     } catch (error) {
       console.log(error);
     }
@@ -74,7 +70,24 @@ export default function GunStats({ gamerTag }: { gamerTag: string }) {
         Get top 5 guns
       </Button>
       <LastUpdated date={getLastUpdated}></LastUpdated>
-      <div>{statsResponse && <Guns guns={statsResponse} />}</div>
+      <div>{<Guns guns={statsResponse} />}</div>
     </div>
   );
 }
+
+// Guns component
+const GunsMemo = ({ guns }: { guns: TopGuns }) => {
+  return (
+    <ol className="gun-list">
+      {guns.map(({ gun, kills }) => (
+        <li key={gun}>
+          <span>
+            {gun} - {kills} <i>kills</i>
+          </span>
+        </li>
+      ))}
+    </ol>
+  );
+};
+
+const Guns = React.memo(GunsMemo);
