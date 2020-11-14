@@ -1,6 +1,6 @@
 import { formatDistanceToNow } from "date-fns";
 import localforage from "localforage";
-import React, { ReactChildren, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import type { LastUpdated as LastUpdatedType } from "../types/index";
 
 export function useLastUpdated(statName: string) {
@@ -25,7 +25,7 @@ export function useLastUpdated(statName: string) {
         })
         .catch((err) => console.error(err));
     }
-  }, []);
+  });
 
   useEffect(() => {
     const newLastUpdate = { [statName]: lastUpdated || "never" };
@@ -37,7 +37,7 @@ export function useLastUpdated(statName: string) {
       ...lastUpdatedFromStorage,
       ...newLastUpdate,
     });
-  }, [statName, lastUpdated]);
+  }, [statName, lastUpdated, lastUpdatedFromStorage]);
 
   return [lastUpdatedFromStorage?.[statName], setLastUpdated];
 }

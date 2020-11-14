@@ -1,8 +1,8 @@
-import { User } from "firebase";
+// import { User } from "firebase";
 import React, { useState } from "react";
-import { useUser } from "reactfire";
+// import { useUser } from "reactfire";
 import Button from "../components/Button";
-import type { GoogleProfile } from "../types";
+// import type { GoogleProfile } from "../types";
 import { updateLocalStorage } from "../util";
 
 interface AccountProps {
@@ -15,10 +15,9 @@ const InputText = (props: any) => <input {...props}></input>;
 
 function GamerTagInput({ collection, uid }: AccountProps) {
   const [gamerTagInput, setGamerTagInput] = useState("");
-  const data: GoogleProfile | User = useUser();
+  // const data: GoogleProfile | User = useUser();
 
   const updateGamerTag = async (gamerTag: string) => {
-    // will need to wrap this in a try catch and show that the gamertag has been added
     try {
       // set localstorage
       updateLocalStorage(uid, { gamerTag });

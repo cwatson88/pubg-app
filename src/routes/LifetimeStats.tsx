@@ -41,7 +41,6 @@ export default function LifetimeStats({ gamerTag }: { gamerTag: string }) {
 
   return (
     <div style={{ display: "grid", justifyItems: "center" }}>
-      {console.log("loaded lifetime stats")}
       <Button onClick={() => getStats(gamerTag)} className="p-button-raised">
         Update LifeTime Stats
       </Button>
